@@ -1,0 +1,103 @@
+---
+import { nav, site } from "../data/site.js";
+import Icon from "./Icon.astro";
+const path = Astro.url.pathname;
+const isActive = (href) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+<header
+  id="site-header"
+  class="sticky top-0 z-40 border-b border-ink/5 bg-paper/85 backdrop-blur-md transition-shadow"
+>
+  <div class="container-page flex h-18 items-center justify-between py-3">
+    <a href="/" class="flex items-center gap-2.5" aria-label={`${site.name} home`}>
+      <span
+        class="flex h-9 w-9 items-center justify-center rounded-xl bg-forest text-white"
+      >
+        <Icon name="home" class="h-5 w-5" />
+      </span>
+      <span class="font-display text-xl font-semibold tracking-tight text-ink"
+        >{site.name}</span
+      >
+    </a>
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+              isActive(item.href)
+                ? "bg-forest/10 text-forest"
+                : "text-ink-soft hover:text-forest",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={`tel:${site.phone.replace(/[^0-9+]/g, "")}`}
+        class="hidden items-center gap-2 text-sm font-medium text-ink-soft hover:text-forest md:flex"
+      >
+        <Icon name="phone" class="h-4 w-4" />
+        {site.phone}
+      </a>
+      <a href="/contact/" class="btn btn-primary hidden sm:inline-flex">Book a tour</a>
+      <button
+        id="menu-toggle"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" class="h-5 w-5" />
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-ink/5 bg-paper lg:hidden"
+  >
+    <nav class="container-page flex flex-col py-4" aria-label="Mobile">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-xl px-4 py-3 text-base font-medium",
+              isActive(item.href)
+                ? "bg-forest/10 text-forest"
+                : "text-ink-soft",
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/contact/" class="btn btn-primary mt-3">Book a tour</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const header = document.getElementById("site-header");
+  toggle?.addEventListener("click", () => {
+    const open = menu?.classList.toggle("hidden");
+    toggle.setAttribute("aria-expanded", String(open === false));
+  });
+  // Subtle shadow once scrolled.
+  const onScroll = () => {
+    if (window.scrollY > 8) header?.classList.add("shadow-soft");
+    else header?.classList.remove("shadow-soft");
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+</script>

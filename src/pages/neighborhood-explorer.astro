@@ -1,0 +1,121 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site.js";
+
+const dn = site.dreamNeighborhood;
+
+// Seed the embedded explorer with a default location (8500 Sunset Blvd,
+// pre-geocoded). Visitors can search any U.S. address once it loads.
+const explorerSrc =
+  `${"https://app.dreamneighborhood.com/explorer/widget/"}?partner=${dn.partnerId}` +
+  `&widget_number=1&embed=inline&lat=34.0937884&lng=-118.3766542`;
+
+const capabilities = [
+  ["shield", "Crime & safety", "Local crime trends and safety scores by area."],
+  ["building", "Schools & education", "Ratings, attendance zones, and education stats."],
+  ["trending", "Market trends", "Values, price history, and demand signals."],
+  ["pin", "Points of interest", "Groceries, dining, parks, gyms, and more."],
+  ["users", "Population & demographics", "Age, household, and community makeup."],
+  ["arrowUpRight", "Commute calculator", "Drive, transit, bike, and walk times anywhere."],
+];
+---
+<Base
+  title="Neighborhood Explorer"
+  description="Explore any neighborhood with the embedded Dream Neighborhood explorer — schools, safety, commutes, market trends, and 38+ hyperlocal data points."
+>
+  <section class="border-b border-ink/8 bg-cream">
+    <div class="container-page py-12">
+      <span class="eyebrow"><Icon name="layers" class="h-4 w-4" /> Embedded explorer</span>
+      <h1 class="mt-3 font-display text-4xl text-ink sm:text-5xl">The Neighborhood Explorer</h1>
+      <p class="mt-3 max-w-2xl text-ink-soft">
+        This is the full Dream Neighborhood explorer embedded directly in the page.
+        Search any U.S. address, pan the map, and dig into 38+ hyperlocal data points —
+        all without ever leaving the site.
+      </p>
+    </div>
+  </section>
+
+  <!--
+    The embedded explorer. This is the full Dream Neighborhood panel delivered
+    as a single iframe. The `dn-exp-inline-iframe` class tells the popup SDK to
+    suppress the floating button on this page (so the two demos don't overlap).
+  -->
+  <section class="container-page py-10">
+    <div
+      class="dn-explorer-frame relative w-full overflow-hidden rounded-[1.75rem] border border-ink/8 bg-white shadow-soft"
+    >
+      <div class="dn-explorer-loading absolute inset-0 flex flex-col items-center justify-center gap-4 text-center">
+        <div class="h-10 w-10 animate-spin rounded-full border-2 border-forest/30 border-t-forest"></div>
+        <p class="text-sm text-muted">Loading the neighborhood explorer…</p>
+      </div>
+      <iframe
+        src={explorerSrc}
+        title="Dream Neighborhood Explorer"
+        loading="lazy"
+        class="dn-exp-inline-iframe relative block w-full"
+        style="border:0; color-scheme: light; min-height: 800px;"
+        allow="geolocation"
+      ></iframe>
+      <noscript>
+        <p class="p-6 text-sm text-muted">
+          The interactive explorer requires JavaScript. Please enable it to view
+          neighborhood data.
+        </p>
+      </noscript>
+    </div>
+  </section>
+
+  <style>
+    .dn-explorer-frame { min-height: 800px; }
+    .dn-exp-inline-iframe { height: 800px; }
+    @media (max-width: 768px) {
+      .dn-explorer-frame { min-height: 900px; }
+      .dn-exp-inline-iframe { height: 900px; }
+    }
+  </style>
+
+  <!-- Capabilities -->
+  <section class="container-page py-10">
+    <div class="text-center" data-reveal>
+      <span class="eyebrow">What's inside</span>
+      <h2 class="mt-3 font-display text-3xl text-ink sm:text-4xl">38+ data points, one panel</h2>
+    </div>
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {capabilities.map(([icon, title, copy]) => (
+        <div class="rounded-2xl border border-ink/8 bg-white p-6" data-reveal>
+          <span class="grid h-11 w-11 place-items-center rounded-xl bg-forest/10 text-forest"><Icon name={icon} class="h-5 w-5" /></span>
+          <h3 class="mt-4 font-display text-lg text-ink">{title}</h3>
+          <p class="mt-1 text-sm text-muted">{copy}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- For realtors -->
+  <section class="container-page py-12">
+    <div class="grid items-center gap-10 rounded-[2rem] bg-ink p-8 text-paper sm:p-12 lg:grid-cols-2" data-reveal>
+      <div>
+        <span class="eyebrow text-forest-light"><Icon name="code" class="h-4 w-4" /> For realtors</span>
+        <h2 class="mt-3 font-display text-3xl text-white">Add this to your own site in one line</h2>
+        <p class="mt-4 text-paper/70">
+          The popup installs with a single snippet and appears on every listing
+          automatically — no redesign, no developer headaches. Want the full panel
+          embedded like above? Drop in one container element.
+        </p>
+        <a href="https://www.dreamneighborhood.com" target="_blank" rel="noopener" class="btn btn-light mt-7">Get Dream Neighborhood <Icon name="arrowUpRight" class="h-4 w-4" /></a>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest-light">Popup — one line</p>
+          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;script src="https://app.dreamneighborhood.com/explorer/sdk.js"
+        data-partner-id="64868" async&gt;&lt;/script&gt;</code></pre>
+        </div>
+        <div>
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest-light">Embedded explorer — add a container</p>
+          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;div id="dn-explorer"&gt;&lt;/div&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

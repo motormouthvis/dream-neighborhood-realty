@@ -1,0 +1,86 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { stats } from "../data/site.js";
+import { agents } from "../data/properties.js";
+
+const team = Object.values(agents);
+const values = [
+  ["shield", "Transparency first", "We put the full picture in front of buyers — including the neighborhood — so there are no surprises."],
+  ["sparkle", "Technology-forward", "We pair seasoned agents with modern tools that make the search smarter and faster."],
+  ["users", "Client-obsessed", "From first showing to closing day, we optimize for the right fit, not just the fastest deal."],
+];
+---
+<Base
+  title="About"
+  description="DN Realty pairs seasoned local agents with neighborhood technology to help buyers decide with confidence."
+>
+  <section class="container-page grid items-center gap-12 py-16 lg:grid-cols-2">
+    <div data-reveal>
+      <span class="eyebrow">About us</span>
+      <h1 class="mt-3 font-display text-4xl text-ink sm:text-5xl">Real estate, with the full picture.</h1>
+      <p class="mt-5 text-ink-soft">
+        DN Realty was built on a simple idea: buyers shouldn't have to leave your site
+        to understand a neighborhood. We combine experienced local agents with the
+        Dream Neighborhood platform so every listing tells its complete story — schools,
+        safety, commutes, market trends, and the texture of daily life.
+      </p>
+      <p class="mt-4 text-ink-soft">
+        The result is a calmer, more confident search: fewer wasted tours, better-matched
+        buyers, and decisions everyone feels good about.
+      </p>
+    </div>
+    <div class="overflow-hidden rounded-[2rem] shadow-card" data-reveal>
+      <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1100&q=80" alt="The DN Realty team at work" class="h-[440px] w-full object-cover" />
+    </div>
+  </section>
+
+  <section class="bg-cream py-16">
+    <div class="container-page grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {stats.map((s) => (
+        <div class="text-center" data-reveal>
+          <p class="font-display text-4xl text-forest sm:text-5xl">{s.value}</p>
+          <p class="mt-1 text-sm text-ink-soft">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <div class="text-center" data-reveal>
+      <span class="eyebrow">What we value</span>
+      <h2 class="mt-3 font-display text-3xl text-ink sm:text-4xl">How we work</h2>
+    </div>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      {values.map(([icon, title, copy]) => (
+        <div class="rounded-2xl border border-ink/8 bg-white p-7" data-reveal>
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-forest/10 text-forest"><Icon name={icon} class="h-6 w-6" /></span>
+          <h3 class="mt-4 font-display text-xl text-ink">{title}</h3>
+          <p class="mt-2 text-sm text-muted">{copy}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page pb-8">
+    <div class="text-center" data-reveal>
+      <span class="eyebrow">The team</span>
+      <h2 class="mt-3 font-display text-3xl text-ink sm:text-4xl">Agents who know the area</h2>
+    </div>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {team.map((a) => (
+        <div class="card lift overflow-hidden text-center" data-reveal>
+          <img src={a.photo} alt={a.name} class="h-56 w-full object-cover" />
+          <div class="p-5">
+            <p class="font-display text-lg text-ink">{a.name}</p>
+            <p class="mt-0.5 text-xs text-muted">{a.title}</p>
+            <div class="mt-4 flex items-center justify-center gap-4 text-sm">
+              <a href={`tel:${a.phone.replace(/[^0-9+]/g, "")}`} class="text-ink-soft hover:text-forest" aria-label={`Call ${a.name}`}><Icon name="phone" class="h-4 w-4" /></a>
+              <a href={`mailto:${a.email}`} class="text-ink-soft hover:text-forest" aria-label={`Email ${a.name}`}><Icon name="mail" class="h-4 w-4" /></a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,163 @@
+---
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+import PropertyCard from "../../components/PropertyCard.astro";
+import {
+  properties,
+  agents,
+  formatPrice,
+  fullAddress,
+} from "../../data/properties.js";
+
+export function getStaticPaths() {
+  return properties.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+
+const { p } = Astro.props;
+const agent = agents[p.agent];
+const similar = properties
+  .filter((x) => x.slug !== p.slug && x.neighborhood === p.neighborhood)
+  .concat(properties.filter((x) => x.slug !== p.slug))
+  .filter((v, i, a) => a.findIndex((x) => x.slug === v.slug) === i)
+  .slice(0, 3);
+
+const facts = [
+  { icon: "bed", label: "Bedrooms", value: p.beds },
+  { icon: "bath", label: "Bathrooms", value: p.baths },
+  { icon: "area", label: "Living area", value: `${p.sqft.toLocaleString()} sqft` },
+  { icon: "home", label: "Property type", value: p.type },
+];
+---
+<Base
+  title={`${p.address}, ${p.city}`}
+  description={p.summary}
+  image={p.images[0]}
+  listing={p}
+>
+  <article itemscope itemtype="https://schema.org/SingleFamilyResidence">
+    <!-- Breadcrumb + heading -->
+    <div class="container-page pt-8">
+      <nav class="flex items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-forest">Home</a>
+        <Icon name="arrow" class="h-3.5 w-3.5" />
+        <a href="/listings/" class="hover:text-forest">Listings</a>
+        <Icon name="arrow" class="h-3.5 w-3.5" />
+        <span class="text-ink">{p.address}</span>
+      </nav>
+      <div class="mt-5 flex flex-wrap items-end justify-between gap-4">
+        <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          <div class="flex items-center gap-3">
+            <span class="rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold text-forest">{p.status}</span>
+            <span class="rounded-full bg-ink/5 px-3 py-1 text-xs font-medium text-ink-soft">{p.type}</span>
+          </div>
+          <h1 class="mt-3 font-display text-3xl text-ink sm:text-4xl">
+            <span itemprop="streetAddress">{p.address}</span>
+          </h1>
+          <p class="mt-1 flex items-center gap-1.5 text-muted">
+            <Icon name="pin" class="h-4 w-4 text-forest" />
+            <span itemprop="addressLocality">{p.city}</span>,
+            <span itemprop="addressRegion">{p.state}</span>
+            <span itemprop="postalCode">{p.zip}</span>
+            · {p.neighborhood}
+          </p>
+        </div>
+        <p class="font-display text-3xl text-forest sm:text-4xl">{formatPrice(p.price)}</p>
+      </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="container-page mt-6">
+      <div class="grid gap-3 sm:grid-cols-4 sm:grid-rows-2">
+        <img src={p.images[0]} alt={`${p.address} exterior`} class="aspect-[4/3] w-full rounded-2xl object-cover sm:col-span-2 sm:row-span-2 sm:aspect-auto sm:h-full" />
+        <img src={p.images[1]} alt={`${p.address} interior`} class="aspect-[4/3] w-full rounded-2xl object-cover sm:col-span-2" />
+        <img src={p.images[2]} alt={`${p.address} detail`} class="aspect-[4/3] w-full rounded-2xl object-cover sm:col-span-2" />
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="container-page grid gap-10 py-12 lg:grid-cols-[1fr_360px]">
+      <div>
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {facts.map((f) => (
+            <div class="rounded-2xl border border-ink/8 bg-white p-4">
+              <Icon name={f.icon} class="h-5 w-5 text-forest" />
+              <p class="mt-2 text-lg font-semibold text-ink">{f.value}</p>
+              <p class="text-xs text-muted">{f.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-10">
+          <h2 class="font-display text-2xl text-ink">About this home</h2>
+          <p class="mt-3 leading-relaxed text-ink-soft">{p.description}</p>
+        </div>
+
+        <div class="mt-10">
+          <h2 class="font-display text-2xl text-ink">Features & amenities</h2>
+          <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+            {p.features.map((f) => (
+              <li class="flex items-center gap-3 text-sm text-ink-soft">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-forest/10 text-forest"><Icon name="check" class="h-4 w-4" /></span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Neighborhood callout: the popup is injected automatically by the SDK -->
+        <div class="mt-10 overflow-hidden rounded-[1.75rem] bg-ink p-8 text-paper sm:p-10">
+          <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <span class="eyebrow text-forest-light"><Icon name="layers" class="h-4 w-4" /> Neighborhood report</span>
+              <h2 class="mt-3 font-display text-2xl text-white">Know the area, not just the address</h2>
+              <p class="mt-2 max-w-md text-sm text-paper/70">
+                Tap the <span class="font-semibold text-white">neighborhood button</span> in the
+                corner of this page to explore schools, crime, commute times, market trends,
+                and 30+ more data points for {p.address}.
+              </p>
+            </div>
+            <div class="shrink-0">
+              <span class="inline-flex items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white">
+                <Icon name="pin" class="h-4 w-4" /> Look bottom-right
+                <Icon name="arrowUpRight" class="h-4 w-4" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <div class="card p-6">
+          <div class="flex items-center gap-4">
+            <img src={agent.photo} alt={agent.name} class="h-14 w-14 rounded-full object-cover" />
+            <div>
+              <p class="font-semibold text-ink">{agent.name}</p>
+              <p class="text-xs text-muted">{agent.title}</p>
+            </div>
+          </div>
+          <form class="mt-6 space-y-3" onsubmit="event.preventDefault(); this.querySelector('[data-ok]').classList.remove('hidden');">
+            <input type="text" required placeholder="Your name" class="w-full rounded-xl border border-ink/12 bg-cream px-4 py-2.5 text-sm text-ink outline-none focus:border-forest" />
+            <input type="email" required placeholder="Email" class="w-full rounded-xl border border-ink/12 bg-cream px-4 py-2.5 text-sm text-ink outline-none focus:border-forest" />
+            <input type="tel" placeholder="Phone" class="w-full rounded-xl border border-ink/12 bg-cream px-4 py-2.5 text-sm text-ink outline-none focus:border-forest" />
+            <textarea rows="3" placeholder={`I'd like to tour ${p.address}.`} class="w-full resize-none rounded-xl border border-ink/12 bg-cream px-4 py-2.5 text-sm text-ink outline-none focus:border-forest"></textarea>
+            <button type="submit" class="btn btn-primary w-full">Request a tour</button>
+            <p data-ok class="hidden text-center text-sm text-forest">Thanks — {agent.name.split(" ")[0]} will be in touch shortly.</p>
+          </form>
+          <div class="mt-5 flex items-center justify-center gap-4 border-t border-ink/8 pt-4 text-sm">
+            <a href={`tel:${agent.phone.replace(/[^0-9+]/g, "")}`} class="flex items-center gap-1.5 text-ink-soft hover:text-forest"><Icon name="phone" class="h-4 w-4" /> Call</a>
+            <a href={`mailto:${agent.email}`} class="flex items-center gap-1.5 text-ink-soft hover:text-forest"><Icon name="mail" class="h-4 w-4" /> Email</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Similar -->
+    <section class="container-page py-12">
+      <h2 class="font-display text-2xl text-ink sm:text-3xl">More homes you may like</h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {similar.map((s) => <PropertyCard property={s} />)}
+      </div>
+    </section>
+  </article>
+</Base>
