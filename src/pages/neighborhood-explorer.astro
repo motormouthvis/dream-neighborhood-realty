@@ -1,15 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
-import { site } from "../data/site.js";
-
-const dn = site.dreamNeighborhood;
-
-// Seed the embedded explorer with a default location (8500 Sunset Blvd,
-// pre-geocoded). Visitors can search any U.S. address once it loads.
-const explorerSrc =
-  `${"https://app.dreamneighborhood.com/explorer/widget/"}?partner=${dn.partnerId}` +
-  `&widget_number=1&embed=inline&lat=34.0937884&lng=-118.3766542`;
 
 const capabilities = [
   ["shield", "Crime & safety", "Local crime trends and safety scores by area."],
@@ -23,6 +14,7 @@ const capabilities = [
 <Base
   title="Neighborhood Explorer"
   description="Explore any neighborhood with the embedded Dream Neighborhood explorer — schools, safety, commutes, market trends, and 38+ hyperlocal data points."
+  disablePopup={true}
 >
   <section class="border-b border-ink/8 bg-cream">
     <div class="container-page py-12">
@@ -36,27 +28,13 @@ const capabilities = [
     </div>
   </section>
 
-  <!--
-    The embedded explorer. This is the full Dream Neighborhood panel delivered
-    as a single iframe. The `dn-exp-inline-iframe` class tells the popup SDK to
-    suppress the floating button on this page (so the two demos don't overlap).
-  -->
+  <!-- Dream Neighborhood embed: container + inline script only (no popup on this page). -->
   <section class="container-page py-10">
     <div
-      class="dn-explorer-frame relative w-full overflow-hidden rounded-[1.75rem] border border-ink/8 bg-white shadow-soft"
+      class="relative w-full min-h-[800px] overflow-hidden rounded-[1.75rem] border border-ink/8 bg-white shadow-soft md:min-h-[900px]"
     >
-      <div class="dn-explorer-loading absolute inset-0 flex flex-col items-center justify-center gap-4 text-center">
-        <div class="h-10 w-10 animate-spin rounded-full border-2 border-forest/30 border-t-forest"></div>
-        <p class="text-sm text-muted">Loading the neighborhood explorer…</p>
-      </div>
-      <iframe
-        src={explorerSrc}
-        title="Dream Neighborhood Explorer"
-        loading="lazy"
-        class="dn-exp-inline-iframe relative block w-full"
-        style="border:0; color-scheme: light; min-height: 800px;"
-        allow="geolocation"
-      ></iframe>
+      <div id="dn-explorer"></div>
+      <script src="https://app.dreamneighborhood.com/explorer/inline.js" async is:inline></script>
       <noscript>
         <p class="p-6 text-sm text-muted">
           The interactive explorer requires JavaScript. Please enable it to view
@@ -65,15 +43,6 @@ const capabilities = [
       </noscript>
     </div>
   </section>
-
-  <style>
-    .dn-explorer-frame { min-height: 800px; }
-    .dn-exp-inline-iframe { height: 800px; }
-    @media (max-width: 768px) {
-      .dn-explorer-frame { min-height: 900px; }
-      .dn-exp-inline-iframe { height: 900px; }
-    }
-  </style>
 
   <!-- Capabilities -->
   <section class="container-page py-10">
@@ -108,12 +77,12 @@ const capabilities = [
       <div class="space-y-4">
         <div>
           <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest-light">Popup — one line</p>
-          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;script src="https://app.dreamneighborhood.com/explorer/sdk.js"
-        data-partner-id="64868" async&gt;&lt;/script&gt;</code></pre>
+          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;script src='https://app.dreamneighborhood.com/explorer/sdk.js' async&gt;&lt;/script&gt;</code></pre>
         </div>
         <div>
-          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest-light">Embedded explorer — add a container</p>
-          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;div id="dn-explorer"&gt;&lt;/div&gt;</code></pre>
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-forest-light">Embedded explorer</p>
+          <pre class="overflow-x-auto rounded-xl bg-black/40 p-4 text-xs leading-relaxed text-paper/90"><code>&lt;div id="dn-explorer"&gt;&lt;/div&gt;
+&lt;script src="https://app.dreamneighborhood.com/explorer/inline.js" async&gt;&lt;/script&gt;</code></pre>
         </div>
       </div>
     </div>

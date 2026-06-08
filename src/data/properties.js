@@ -1,5 +1,5 @@
 // Demo listings. Addresses are real, geocodable US addresses so the
-// Dream Neighborhood popup/explorer resolves accurate neighborhood data.
+// Demo listings use real, geocodable U.S. addresses.
 const img = (id, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 

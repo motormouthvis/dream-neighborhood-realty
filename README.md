@@ -20,14 +20,14 @@ output as a fully static site, ready to host on **Netlify**.
 
 ```
 src/
-  components/      Header, Footer, PropertyCard, Icon, NeighborhoodSDK
+  components/      Header, Footer, PropertyCard, Icon
   data/            site.js (config/content) · properties.js (listings + agents)
-  layouts/         Base.astro (head/SEO, structured data, popup SDK)
+  layouts/         Base.astro (head/SEO, structured data, Dream Neighborhood popup)
   pages/
     index.astro                 Home
     listings/index.astro        Listings grid (search + filter + sort)
-    listings/[slug].astro       Listing detail (popup auto-detects address)
-    neighborhood-explorer.astro Embedded explorer demo (iframe)
+    listings/[slug].astro       Listing detail
+    neighborhood-explorer.astro Embedded explorer (inline.js)
     about.astro · contact.astro · 404.astro
   styles/global.css             Design tokens + components
 public/            favicon.svg, robots.txt
@@ -35,39 +35,28 @@ public/            favicon.svg, robots.txt
 
 ## Dream Neighborhood integration
 
-All configuration lives in `src/data/site.js` under `dreamNeighborhood`.
-**Partner ID `64868`** (resolved from the live site's domain).
+Use **only** the official snippets (no partner IDs or extra attributes in this repo).
 
-### Popup (flagship — one line of code)
+### Popup (entire site)
 
-`src/components/NeighborhoodSDK.astro` renders the single snippet, included on
-every page via the layout:
+One script at the bottom of `src/layouts/Base.astro` (skipped on pages that pass
+`disablePopup`, e.g. 404 and the Neighborhood Explorer page):
 
 ```html
-<script src="https://app.dreamneighborhood.com/explorer/sdk.js"
-        data-partner-id="64868"
-        data-accent-color="#3B5550"
-        data-position="right" async></script>
+<script src='https://app.dreamneighborhood.com/explorer/sdk.js' async></script>
 ```
 
-The SDK auto-detects the listing address. On listing pages we emit three
-redundant signals so detection is rock-solid (`src/layouts/Base.astro`):
-
-1. JSON-LD `SingleFamilyResidence` with a `PostalAddress`
-2. OpenGraph tags (`og:street-address`, `og:locality`, `og:region`, `og:postal-code`)
-3. Schema.org microdata (`itemprop="streetAddress"`, etc.) on the visible address
+Listing pages still emit JSON-LD, Open Graph address tags, and microdata in
+`Base.astro` so the popup can resolve the property address.
 
 ### Embedded explorer
 
-`neighborhood-explorer.astro` embeds the full panel directly as an iframe:
+Only on `neighborhood-explorer.astro`:
 
 ```html
-<iframe class="dn-exp-inline-iframe"
-        src="https://app.dreamneighborhood.com/explorer/widget/?partner=64868&widget_number=1&embed=inline"></iframe>
+<div id="dn-explorer"></div>
+<script src="https://app.dreamneighborhood.com/explorer/inline.js" async></script>
 ```
-
-The `dn-exp-inline-iframe` class is detected by the SDK, which then suppresses
-the floating popup on that page so the two demos don't overlap.
 
 ## Local development
 
@@ -85,8 +74,6 @@ npm run preview    # serve the production build locally
 1. Push this repo to GitHub (`motormouthvis/dream-neighborhood-realty`).
 2. In Netlify: **Add new site → Import an existing project → GitHub** and pick the repo.
 3. Netlify reads `netlify.toml` automatically — no manual settings needed.
-4. Attach the custom domain `www.dreamneighborhoodrealty.com`. Because the
-   Dream Neighborhood popup is configured by **partner ID** (not just domain),
-   the widget works on the Netlify preview URL too.
+4. Attach the custom domain `www.dreamneighborhoodrealty.com` when you are ready.
 
 > After the domain is finalized, update `site` in `astro.config.mjs` if it changes.

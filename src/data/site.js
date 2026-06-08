@@ -13,13 +13,6 @@ export const site = {
     facebook: "https://facebook.com",
     linkedin: "https://linkedin.com",
   },
-  // Dream Neighborhood popup/explorer integration.
-  dreamNeighborhood: {
-    sdk: "https://app.dreamneighborhood.com/explorer/sdk.js",
-    partnerId: "64868",
-    accentColor: "#3B5550",
-    position: "right",
-  },
 };
 
 export const nav = [
