@@ -41,11 +41,11 @@ const isFirst = index === 0;
     >
   </a>
   <div class="flex flex-1 flex-col p-5">
-    <p class="text-lg font-semibold text-forest">Los Angeles</p>
-    <a href={href} class="mt-1 font-display text-lg text-ink hover:text-forest">
+    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-forest">Neighborhood</span>
+    <a href={href} class="mt-1.5 font-display text-xl text-ink hover:text-forest">
       {n.canonicalName}
     </a>
-    <p class="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
+    <p class="mt-1 flex items-center gap-1.5 text-sm text-muted">
       <Icon name="pin" class="h-4 w-4 shrink-0 text-forest" />
       {localityLine}
     </p>
@@ -57,5 +57,14 @@ const isFirst = index === 0;
       <span class="flex items-center gap-1.5"><Icon name="building" class="h-4 w-4 text-forest" /> Schools</span>
       <span class="flex items-center gap-1.5"><Icon name="trending" class="h-4 w-4 text-forest" /> Market</span>
     </div>
+
+    <a
+      href={href}
+      class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-forest transition-colors hover:text-forest-dark"
+      aria-label={`Explore ${n.canonicalName}`}
+    >
+      Explore area
+      <Icon name="arrowUpRight" class="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </a>
   </div>
 </article>
