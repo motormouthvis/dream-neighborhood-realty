@@ -7,7 +7,7 @@ export const site = {
   url: "https://www.dreamneighborhoodrealty.com",
   email: "sales@dreamneighborhood.com",
   phone: "(772) 202-0185",
-  address: "729 S.W. Federal Highway, Suite 200, Stuart, FL, United States",
+  address: "St. Lucie Village, FL",
   social: {
     instagram: "https://instagram.com",
     facebook: "https://facebook.com",
