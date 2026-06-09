@@ -5,8 +5,8 @@ export const site = {
   description:
     "DN Realty connects you with exclusive real estate opportunities and gives every listing a complete neighborhood story — powered by Dream Neighborhood.",
   url: "https://www.dreamneighborhoodrealty.com",
-  email: "hello@dreamneighborhoodrealty.com",
-  phone: "(323) 555-0142",
+  email: "sales@dreamneighborhood.com",
+  phone: "(772) 202-0185",
   address: "8500 Sunset Blvd, Los Angeles, CA 90069",
   social: {
     instagram: "https://instagram.com",

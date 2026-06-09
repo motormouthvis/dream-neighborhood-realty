@@ -291,7 +291,7 @@ export const agents = {
     name: "Leslie Alexander",
     title: "Principal Agent · DRE #02014455",
     phone: "(323) 555-0188",
-    email: "leslie@dreamneighborhoodrealty.com",
+    email: "leslie@dreamneighborhood.com",
     photo:
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
   },
@@ -299,7 +299,7 @@ export const agents = {
     name: "Albert Flores",
     title: "Senior Agent · DRE #02019921",
     phone: "(323) 555-0190",
-    email: "albert@dreamneighborhoodrealty.com",
+    email: "albert@dreamneighborhood.com",
     photo:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
   },
@@ -307,7 +307,7 @@ export const agents = {
     name: "Brooklyn Simmons",
     title: "Luxury Specialist · DRE #02022210",
     phone: "(323) 555-0193",
-    email: "brooklyn@dreamneighborhoodrealty.com",
+    email: "brooklyn@dreamneighborhood.com",
     photo:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80",
   },
@@ -315,7 +315,7 @@ export const agents = {
     name: "Robert Fox",
     title: "Associate Agent · DRE #02025518",
     phone: "(323) 555-0197",
-    email: "robert@dreamneighborhoodrealty.com",
+    email: "robert@dreamneighborhood.com",
     photo:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
   },
