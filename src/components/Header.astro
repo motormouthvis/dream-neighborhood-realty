@@ -2,8 +2,16 @@
 import { nav, site } from "../data/site.js";
 import Icon from "./Icon.astro";
 const path = Astro.url.pathname;
-const isActive = (href) =>
-  href === "/" ? path === "/" : path.startsWith(href);
+const norm = (href) => href.replace(/\/$/, "") || "/";
+const pathNorm = norm(path);
+
+const isNavItemActive = (item) => {
+  const h = norm(item.href);
+  if (item.matchSection === "neighborhoods") {
+    return pathNorm === "/neighborhoods" || pathNorm.startsWith("/neighborhood/");
+  }
+  return h === "/" ? pathNorm === "/" : pathNorm === h || pathNorm.startsWith(`${h}/`);
+};
 ---
 <header
   id="site-header"
@@ -28,7 +36,7 @@ const isActive = (href) =>
             href={item.href}
             class:list={[
               "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-              isActive(item.href)
+              isNavItemActive(item)
                 ? "bg-forest/10 text-forest"
                 : "text-ink-soft hover:text-forest",
             ]}
@@ -71,7 +79,7 @@ const isActive = (href) =>
             href={item.href}
             class:list={[
               "rounded-xl px-4 py-3 text-base font-medium",
-              isActive(item.href)
+              isNavItemActive(item)
                 ? "bg-forest/10 text-forest"
                 : "text-ink-soft",
             ]}
@@ -93,7 +101,6 @@ const isActive = (href) =>
     const open = menu?.classList.toggle("hidden");
     toggle.setAttribute("aria-expanded", String(open === false));
   });
-  // Subtle shadow once scrolled.
   const onScroll = () => {
     if (window.scrollY > 8) header?.classList.add("shadow-soft");
     else header?.classList.remove("shadow-soft");

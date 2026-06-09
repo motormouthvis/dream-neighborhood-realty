@@ -1,0 +1,93 @@
+---
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+import { neighborhoods } from "../../data/neighborhoods.js";
+
+export function getStaticPaths() {
+  return neighborhoods.map((n) => ({
+    params: { slug: n.slug },
+    props: { n },
+  }));
+}
+
+const { n } = Astro.props;
+
+const place = {
+  name: n.canonicalName,
+  streetAddress: n.anchorStreet,
+  addressLocality: n.anchorLocality,
+  addressRegion: n.anchorRegion,
+  postalCode: n.anchorPostalCode,
+};
+---
+
+<Base
+  title={n.canonicalName}
+  description={n.metaDescription}
+  place={place}
+  disablePopup={true}
+>
+  <article
+    class="border-b border-ink/8 bg-cream"
+    data-neighborhood-slug={n.slug}
+    data-neighborhood-label={n.canonicalName}
+  >
+    <div class="container-page py-10">
+      <nav class="flex flex-wrap items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-forest">Home</a>
+        <Icon name="arrow" class="h-3.5 w-3.5 shrink-0" />
+        <a href="/neighborhoods/" class="hover:text-forest">Neighborhoods</a>
+        <Icon name="arrow" class="h-3.5 w-3.5 shrink-0" />
+        <span class="text-ink">{n.canonicalName}</span>
+      </nav>
+      <h1 class="mt-6 font-display text-4xl text-ink sm:text-5xl">{n.canonicalName}</h1>
+      <p class="mt-3 max-w-2xl text-ink-soft">
+        On-page neighborhood context plus the embedded explorer — the same hyperlocal stack we attach to listings,
+        centered on {n.shortLabel}.
+      </p>
+      <div class="mt-8 overflow-hidden rounded-[1.25rem] border border-ink/8 shadow-soft">
+        <img
+          src={n.cardImage}
+          alt={`Scenic view representing ${n.shortLabel}`}
+          width={1200}
+          height={675}
+          class="aspect-[21/9] max-h-[min(22rem,50vh)] w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </article>
+
+  <section class="container-page py-10">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="font-display text-2xl text-ink">About this area</h2>
+      <div class="mt-5 space-y-4 text-base leading-relaxed text-ink-soft">
+        {n.description.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page pb-16">
+    <div
+      class="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[1.75rem] border border-ink/8 bg-white shadow-soft"
+    >
+      <h2
+        class="border-b border-ink/8 bg-cream px-6 py-4 text-center font-display text-xl text-ink sm:text-2xl"
+      >
+        Dream Neighborhood Explorer
+      </h2>
+      <div
+        class="relative min-h-[800px] w-full md:min-h-[900px]"
+      >
+      <div id="dn-explorer"></div>
+      <script src="https://app.dreamneighborhood.com/explorer/inline.js" async is:inline></script>
+      <noscript>
+        <p class="p-6 text-sm text-muted">
+          The interactive explorer requires JavaScript. Please enable it to view neighborhood data.
+        </p>
+      </noscript>
+      </div>
+    </div>
+  </section>
+</Base>

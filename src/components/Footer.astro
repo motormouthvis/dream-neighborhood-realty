@@ -1,12 +1,11 @@
 ---
-import { site, nav } from "../data/site.js";
+import { site, nav, footerSecondaryNav } from "../data/site.js";
 import Icon from "./Icon.astro";
 const year = new Date().getFullYear();
 const resources = [
   { label: "Buying", href: "/listings/" },
   { label: "Selling", href: "/contact/" },
   { label: "Neighborhood Explorer", href: "/neighborhood-explorer/" },
-  { label: "About us", href: "/about/" },
 ];
 ---
 <footer class="mt-24 bg-ink text-paper">
@@ -34,9 +33,20 @@ const resources = [
       <div>
         <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-paper/50">Pages</h3>
         <ul class="mt-4 space-y-3 text-sm">
-          {nav.map((item) => (
-            <li><a href={item.href} class="text-paper/75 hover:text-white">{item.label}</a></li>
-          ))}
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href} class="text-paper/75 hover:text-white">{item.label}</a>
+              </li>
+            ))
+          }
+          {
+            footerSecondaryNav.map((item) => (
+              <li>
+                <a href={item.href} class="text-paper/75 hover:text-white">{item.label}</a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 

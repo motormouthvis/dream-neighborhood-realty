@@ -10,6 +10,8 @@ const {
   description = site.description,
   image = "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80",
   listing = null,
+  /** Geocodable anchor for neighborhood pages (Open Graph + JSON-LD Place). */
+  place = null,
   disablePopup = false,
 } = Astro.props;
 
@@ -35,6 +37,23 @@ const listingJsonLd = listing
       },
     }
   : null;
+
+const placeJsonLd =
+  place && !listing
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Place",
+        name: place.name,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: place.streetAddress,
+          addressLocality: place.addressLocality,
+          addressRegion: place.addressRegion,
+          postalCode: place.postalCode,
+          addressCountry: "US",
+        },
+      }
+    : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -61,6 +80,17 @@ const listingJsonLd = listing
         <meta property="og:region" content={listing.state} />
         <meta property="og:postal-code" content={listing.zip} />
         <script type="application/ld+json" set:html={JSON.stringify(listingJsonLd)} />
+      </>
+    )}
+
+    {place && !listing && (
+      <>
+        <meta property="og:street-address" content={place.streetAddress} />
+        <meta property="og:locality" content={place.addressLocality} />
+        <meta property="og:region" content={place.addressRegion} />
+        <meta property="og:postal-code" content={place.postalCode} />
+        <meta name="geo.placename" content={place.name} />
+        <script type="application/ld+json" set:html={JSON.stringify(placeJsonLd)} />
       </>
     )}
 

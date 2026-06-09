@@ -15,10 +15,16 @@ export const site = {
   },
 };
 
+/** Primary header navigation (keep short — About & Contact live in the footer). */
 export const nav = [
   { label: "Home", href: "/" },
   { label: "Listings", href: "/listings/" },
+  { label: "Neighborhoods", href: "/neighborhoods/", matchSection: "neighborhoods" },
   { label: "Neighborhood Explorer", href: "/neighborhood-explorer/" },
+];
+
+/** Shown in the footer Pages column after main nav links. */
+export const footerSecondaryNav = [
   { label: "About", href: "/about/" },
   { label: "Contact", href: "/contact/" },
 ];
