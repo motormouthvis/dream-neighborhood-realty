@@ -7,7 +7,7 @@ export const site = {
   url: "https://www.dreamneighborhoodrealty.com",
   email: "sales@dreamneighborhood.com",
   phone: "(772) 202-0185",
-  address: "8500 Sunset Blvd, Los Angeles, CA 90069",
+  address: "729 S.W. Federal Highway, Suite 200, Stuart, FL, United States",
   social: {
     instagram: "https://instagram.com",
     facebook: "https://facebook.com",
